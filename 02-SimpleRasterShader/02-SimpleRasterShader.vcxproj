@@ -20,6 +20,7 @@
     <ClCompile Include="..\SharedUtils\SceneLoaderWrapper.cpp" />
     <ClCompile Include="..\SharedUtils\SimpleVars.cpp" />
     <ClCompile Include="Passes\CopyToOutputPass.cpp" />
+    <ClCompile Include="Passes\RayTracedGBufferPass.cpp" />
     <ClCompile Include="Passes\SimpleGBufferPass.cpp" />
     <ClCompile Include="Passes\SinusoidRasterPass.cpp" />
     <ClCompile Include="Tutor02-SimpleRasterShader.cpp" />
@@ -34,10 +35,12 @@
     <ClInclude Include="..\SharedUtils\SceneLoaderWrapper.h" />
     <ClInclude Include="..\SharedUtils\SimpleVars.h" />
     <ClInclude Include="Passes\CopyToOutputPass.h" />
+    <ClInclude Include="Passes\RayTracedGBufferPass.h" />
     <ClInclude Include="Passes\SimpleGBufferPass.h" />
     <ClInclude Include="Passes\SinusoidRasterPass.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Tutorial02\alphaTest.hlsli" />
     <None Include="Data\Tutorial02\sinusoid.ps.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -55,6 +58,11 @@
       <FileType>Document</FileType>
     </None>
     <None Include="Data\Tutorial02\gBuffer.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Tutorial02\rayTracedGBuffer.rt.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
