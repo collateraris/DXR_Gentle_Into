@@ -19,6 +19,7 @@
     <ClCompile Include="..\SharedUtils\ResourceManager.cpp" />
     <ClCompile Include="..\SharedUtils\SceneLoaderWrapper.cpp" />
     <ClCompile Include="..\SharedUtils\SimpleVars.cpp" />
+    <ClCompile Include="Passes\AmbientOcclusionPass.cpp" />
     <ClCompile Include="Passes\CopyToOutputPass.cpp" />
     <ClCompile Include="Passes\RayTracedGBufferPass.cpp" />
     <ClCompile Include="Passes\SimpleGBufferPass.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="..\SharedUtils\ResourceManager.h" />
     <ClInclude Include="..\SharedUtils\SceneLoaderWrapper.h" />
     <ClInclude Include="..\SharedUtils\SimpleVars.h" />
+    <ClInclude Include="Passes\AmbientOcclusionPass.h" />
     <ClInclude Include="Passes\CopyToOutputPass.h" />
     <ClInclude Include="Passes\RayTracedGBufferPass.h" />
     <ClInclude Include="Passes\SimpleGBufferPass.h" />
@@ -41,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Tutorial02\alphaTest.hlsli" />
+    <None Include="Data\Tutorial02\hlslUtils.hlsli" />
     <None Include="Data\Tutorial02\sinusoid.ps.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -63,6 +66,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Tutorial02\rayTracedGBuffer.rt.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Tutorial02\aoTracing.rt.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

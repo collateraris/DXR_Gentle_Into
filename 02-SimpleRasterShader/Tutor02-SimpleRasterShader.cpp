@@ -18,16 +18,16 @@
 
 #include "Falcor.h"
 #include "../SharedUtils/RenderingPipeline.h"
-#include "Passes/RayTracedGBufferPass.h"
-#include "Passes/CopyToOutputPass.h"
+#include "Passes/SimpleGBufferPass.h"
+#include "Passes/AmbientOcclusionPass.h"
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
 	// Create our rendering pipeline
 	RenderingPipeline *pipeline = new RenderingPipeline();
-	pipeline->setPass(0, RayTracedGBufferPass::create());
-	pipeline->setPass(1, CopyToOutputPass::create());
+	pipeline->setPass(0, SimpleGBufferPass::create());
+	pipeline->setPass(1, AmbientOcclusionPass::create());
 
 	// Define a set of config / window parameters for our program
     SampleConfig config;
