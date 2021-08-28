@@ -22,6 +22,7 @@
     <ClCompile Include="Passes\AmbientOcclusionPass.cpp" />
     <ClCompile Include="Passes\CopyToOutputPass.cpp" />
     <ClCompile Include="Passes\RayTracedGBufferPass.cpp" />
+    <ClCompile Include="Passes\SimpleAccumulationPass.cpp" />
     <ClCompile Include="Passes\SimpleGBufferPass.cpp" />
     <ClCompile Include="Passes\SinusoidRasterPass.cpp" />
     <ClCompile Include="Tutor02-SimpleRasterShader.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="Passes\AmbientOcclusionPass.h" />
     <ClInclude Include="Passes\CopyToOutputPass.h" />
     <ClInclude Include="Passes\RayTracedGBufferPass.h" />
+    <ClInclude Include="Passes\SimpleAccumulationPass.h" />
     <ClInclude Include="Passes\SimpleGBufferPass.h" />
     <ClInclude Include="Passes\SinusoidRasterPass.h" />
   </ItemGroup>
@@ -71,6 +73,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Tutorial02\aoTracing.rt.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Tutorial02\accumulate.ps.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

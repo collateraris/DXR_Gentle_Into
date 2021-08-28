@@ -16,26 +16,19 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **********************************************************************************************************************/
 
-#include "Falcor.h"
-#include "../SharedUtils/RenderingPipeline.h"
-#include "Passes/SimpleGBufferPass.h"
-#include "Passes/AmbientOcclusionPass.h"
-#include "Passes/SimpleAccumulationPass.h"
-
-
-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
+cbuffer PerFrameCB
 {
-	// Create our rendering pipeline
-	RenderingPipeline *pipeline = new RenderingPipeline();
-	pipeline->setPass(0, SimpleGBufferPass::create());
-	pipeline->setPass(1, AmbientOcclusionPass::create());
-	pipeline->setPass(2, SimpleAccumulationPass::create(ResourceManager::kOutputChannel));
+    uint gAccumCount;
+}
 
-	// Define a set of config / window parameters for our program
-    SampleConfig config;
-    config.windowDesc.title = "Tutorial 3:  Allows you to load a scene and generate a G-buffer (and then display various textures in the G-buffer)";
-    config.windowDesc.resizableWindow = true;
+Texture2D<float4>   gLastFrame;
+Texture2D<float4>   gCurFrame;
 
-	// Start our program!
-	RenderingPipeline::run(pipeline, config);
+float4 main(float2 texC : TEXCOORD, float4 pos : SV_Position) : SV_Target0
+{
+    uint2 pixelPos = (uint2)pos.xy;
+    float4 curColor = gCurFrame[pixelPos];
+    float4 prevColor = gLastFrame[pixelPos];
+
+	return (gAccumCount * prevColor + curColor) / (gAccumCount + 1);
 }
