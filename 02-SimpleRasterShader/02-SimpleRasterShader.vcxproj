@@ -26,6 +26,7 @@
     <ClCompile Include="Passes\SimpleAccumulationPass.cpp" />
     <ClCompile Include="Passes\SimpleGBufferPass.cpp" />
     <ClCompile Include="Passes\SinusoidRasterPass.cpp" />
+    <ClCompile Include="Passes\ThinLensGBufferPass.cpp" />
     <ClCompile Include="Tutor02-SimpleRasterShader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +45,7 @@
     <ClInclude Include="Passes\SimpleAccumulationPass.h" />
     <ClInclude Include="Passes\SimpleGBufferPass.h" />
     <ClInclude Include="Passes\SinusoidRasterPass.h" />
+    <ClInclude Include="Passes\ThinLensGBufferPass.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Tutorial02\alphaTest.hlsli" />
@@ -51,6 +53,7 @@
     <None Include="Data\Tutorial02\sinusoid.ps.hlsl">
       <FileType>Document</FileType>
     </None>
+    <None Include="Data\Tutorial02\thinLensUtils.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Falcor\Framework\FalcorSharedObjects\FalcorSharedObjects.vcxproj">
@@ -80,6 +83,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Tutorial02\accumulate.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Tutorial02\thinLensGBuffer.rt.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

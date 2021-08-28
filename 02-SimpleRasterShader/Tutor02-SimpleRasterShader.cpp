@@ -18,7 +18,7 @@
 
 #include "Falcor.h"
 #include "../SharedUtils/RenderingPipeline.h"
-#include "Passes/JitteredGBufferPass.h"
+#include "Passes/ThinLensGBufferPass.h"
 #include "Passes/AmbientOcclusionPass.h"
 #include "Passes/SimpleAccumulationPass.h"
 
@@ -27,7 +27,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 {
 	// Create our rendering pipeline
 	RenderingPipeline *pipeline = new RenderingPipeline();
-	pipeline->setPass(0, JitteredGBufferPass::create());
+	pipeline->setPass(0, ThinLensGBufferPass::create());
 	pipeline->setPass(1, AmbientOcclusionPass::create());
 	pipeline->setPass(2, SimpleAccumulationPass::create(ResourceManager::kOutputChannel));
 
