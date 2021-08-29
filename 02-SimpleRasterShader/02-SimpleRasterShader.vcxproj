@@ -22,6 +22,7 @@
     <ClCompile Include="Passes\AmbientOcclusionPass.cpp" />
     <ClCompile Include="Passes\CopyToOutputPass.cpp" />
     <ClCompile Include="Passes\JitteredGBufferPass.cpp" />
+    <ClCompile Include="Passes\LambertianPlusShadowPass.cpp" />
     <ClCompile Include="Passes\RayTracedGBufferPass.cpp" />
     <ClCompile Include="Passes\SimpleAccumulationPass.cpp" />
     <ClCompile Include="Passes\SimpleGBufferPass.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="Passes\AmbientOcclusionPass.h" />
     <ClInclude Include="Passes\CopyToOutputPass.h" />
     <ClInclude Include="Passes\JitteredGBufferPass.h" />
+    <ClInclude Include="Passes\LambertianPlusShadowPass.h" />
     <ClInclude Include="Passes\RayTracedGBufferPass.h" />
     <ClInclude Include="Passes\SimpleAccumulationPass.h" />
     <ClInclude Include="Passes\SimpleGBufferPass.h" />
@@ -50,6 +52,7 @@
   <ItemGroup>
     <None Include="Data\Tutorial02\alphaTest.hlsli" />
     <None Include="Data\Tutorial02\hlslUtils.hlsli" />
+    <None Include="Data\Tutorial02\lambertianPlusShadowsUtils.hlsli" />
     <None Include="Data\Tutorial02\sinusoid.ps.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -88,6 +91,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Tutorial02\thinLensGBuffer.rt.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Tutorial02\lambertianPlusShadows.rt.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
