@@ -23,6 +23,7 @@
 namespace {
 	// Where is our shader located?
 	const char* kFileRayTrace = "Tutorial02\\thinLensGBuffer.rt.hlsl";
+	const char* kEnvironmentMap = "MonValley_G_DirtRoad_3k.hdr";
 
 	// What are the entry points in that shader for various ray tracing shaders?
 	const char* kEntryPointRayGen       = "GBufferRayGen";
@@ -43,6 +44,10 @@ bool ThinLensGBufferPass::initialize(RenderContext* pRenderContext, ResourceMana
 
 	// Set the default scene to load
 	mpResManager->setDefaultSceneName("Data/pink_room/pink_room.fscene");
+
+	// By default, the environment map is a solid light blue texture.  We can specify a different
+	//     texture to load at startup by telling our resource manager where to find it. 
+	mpResManager->updateEnvironmentMap(kEnvironmentMap);
 
 	// Create our wrapper around a ray tracing pass.  Tell it where our shaders are, then compile/link the program
 	mpRays = RayLaunch::create(kFileRayTrace, kEntryPointRayGen);
@@ -120,7 +125,7 @@ void ThinLensGBufferPass::execute(RenderContext* pRenderContext)
 
 	// Pass our background color down to our miss shader
 	auto missVars = mpRays->getMissVars(0);
-	missVars["MissShaderCB"]["gBgColor"] = mBgColor;
+	missVars["gEnvMap"] = mpResManager->getTexture(ResourceManager::kEnvironmentMap);
 	missVars["gMatDif"] = matDif;
 
 	// Cycle through all geometry instances, bind our g-buffer outputs to the hit shaders for each instance

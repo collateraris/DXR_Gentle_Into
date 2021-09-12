@@ -48,6 +48,7 @@ protected:
 	// The RenderPass class defines various methods we can override to specify this pass' properties. 
 	bool requiresScene() override { return true; }
 	bool usesRayTracing() override { return true; }
+	bool usesEnvironmentMap() override { return true; }
 
 	// Internal pass state
 	RayLaunch::SharedPtr        mpRays;            ///< Our wrapper around a DX Raytracing pass

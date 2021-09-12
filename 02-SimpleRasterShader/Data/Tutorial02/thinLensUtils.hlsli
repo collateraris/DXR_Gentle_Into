@@ -16,6 +16,9 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **********************************************************************************************************************/
 
+// Define 1/pi
+#define M_1_PI  0.318309886183790671538
+
 // Generates a seed for a random number generator from 2 inputs plus a backoff
 uint initRand(uint val0, uint val1, uint backoff = 16)
 {
@@ -53,4 +56,29 @@ bool alphaTestFails(BuiltInTriangleIntersectionAttributes attribs)
 
 	// Test if this hit point fails a standard alpha test.  
 	return (baseColor.a < gMaterial.alphaThreshold);
+}
+
+// Some early DXR drivers had a bug breaking atan2() in DXR shaders.  This is a work-around
+float atan2_WAR(float y, float x)
+{
+	if (x > 0.f)
+		return atan(y / x);
+	else if (x < 0.f && y >= 0.f)
+		return atan(y / x) + M_PI;
+	else if (x < 0.f && y < 0.f)
+		return atan(y / x) - M_PI;
+	else if (x == 0.f && y > 0.f)
+		return M_PI / 2.f;
+	else if (x == 0.f && y < 0.f)
+		return -M_PI / 2.f;
+	return 0.f; // x==0 && y==0 (undefined)
+}
+
+// Convert our world space direction to a (u,v) coord in a latitude-longitude spherical map
+float2 wsVectorToLatLong(float3 dir)
+{
+	float3 p = normalize(dir);
+	float u = (1.f + atan2_WAR(p.x, -p.z) * M_1_PI) * 0.5f;
+	float v = acos(p.y) * M_1_PI;
+	return float2(u, v);
 }

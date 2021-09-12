@@ -104,18 +104,18 @@ RWTexture2D<float4> gMatDif;
 RWTexture2D<float4> gMatSpec;
 RWTexture2D<float4> gMatExtra;
 
-// A constant buffer used in our miss shader, we'll fill data in from C++ code
-cbuffer MissShaderCB
-{
-	float3  gBgColor;
-};
+// The texture containing our environment map
+Texture2D<float4> gEnvMap;
 
 // What code is executed when our ray misses all geometry?
 [shader("miss")]
 void PrimaryMiss(inout SimpleRayPayload hitData)
 {
-	// Store the background color into our diffuse material buffer
-	gMatDif[DispatchRaysIndex().xy] = float4(gBgColor, 1.0f);
+	float2 texDims;
+	gEnvMap.GetDimensions(texDims.x, texDims.y);
+
+	float2 uv = wsVectorToLatLong(WorldRayDirection());
+	gMatDif[DispatchRaysIndex().xy] = float4(gEnvMap[uint2(uv * texDims)].rgb, 1.0f);
 }
 
 // What code is executed when our ray hits a potentially transparent surface?
