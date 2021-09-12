@@ -66,7 +66,7 @@ void LambertianPlusShadowPass::execute(RenderContext* pRenderContext)
 
 	// Set our ray tracing shader variables 
 	auto rayGenVars = mpRays->getRayGenVars();
-	rayGenVars["RayGenCB"]["gMinT"] = mpResManager->getMinTDist();
+	rayGenVars["RayGenCB"]["gFrameCount"] = mFrameCount++;
 
 	// Pass our G-buffer textures down to the HLSL so we can shade
 	rayGenVars["gPos"]         = mpResManager->getTexture("WorldPosition");     
