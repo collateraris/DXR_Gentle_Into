@@ -18,16 +18,18 @@
 
 #include "Falcor.h"
 #include "../SharedUtils/RenderingPipeline.h"
-#include "Passes/ThinLensGBufferPass.h"
-#include "Passes/LambertianPlusShadowPass.h"
+#include "Passes/SimpleDiffuseGIPass.h"
+#include "Passes/LightProbeGBufferPass.h"
+#include "Passes/SimpleAccumulationPass.h"
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
 	// Create our rendering pipeline
 	RenderingPipeline *pipeline = new RenderingPipeline();
-	pipeline->setPass(0, ThinLensGBufferPass::create());
-	pipeline->setPass(1, LambertianPlusShadowPass::create());
+	pipeline->setPass(0, LightProbeGBufferPass::create());
+	pipeline->setPass(1, SimpleDiffuseGIPass::create());
+	pipeline->setPass(2, SimpleAccumulationPass::create(ResourceManager::kOutputChannel));
 
 	// Define a set of config / window parameters for our program
     SampleConfig config;
