@@ -21,6 +21,8 @@
 #include "Passes/SimpleDiffuseGIPass.h"
 #include "Passes/LightProbeGBufferPass.h"
 #include "Passes/SimpleAccumulationPass.h"
+#include "Passes/GGXGlobalIllumination.h"
+#include "Passes/SimpleToneMappingPass.h"
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
@@ -28,8 +30,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// Create our rendering pipeline
 	RenderingPipeline *pipeline = new RenderingPipeline();
 	pipeline->setPass(0, LightProbeGBufferPass::create());
-	pipeline->setPass(1, SimpleDiffuseGIPass::create());
-	pipeline->setPass(2, SimpleAccumulationPass::create(ResourceManager::kOutputChannel));
+	pipeline->setPass(1, GGXGlobalIlluminationPass::create("HDRColorOutput"));  // Output our result to "HDRColorOutput"
+	pipeline->setPass(2, SimpleAccumulationPass::create("HDRColorOutput"));     // Accumulate on "HDRColorOutput"
+	pipeline->setPass(3, SimpleToneMappingPass::create("HDRColorOutput", ResourceManager::kOutputChannel));  // Tonemap "HDRColorOutput" to the output channel
 
 	// Define a set of config / window parameters for our program
     SampleConfig config;

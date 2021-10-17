@@ -19,51 +19,30 @@
 #pragma once
 #include "../SharedUtils/RenderPass.h"
 #include "../SharedUtils/SimpleVars.h"
-#include "../SharedUtils/FullscreenLaunch.h"
 
-class SimpleAccumulationPass : public ::RenderPass, inherit_shared_from_this<::RenderPass, SimpleAccumulationPass>
+class SimpleToneMappingPass : public ::RenderPass, inherit_shared_from_this<::RenderPass, SimpleToneMappingPass>
 {
 public:
-    using SharedPtr = std::shared_ptr<SimpleAccumulationPass>;
-    using SharedConstPtr = std::shared_ptr<const SimpleAccumulationPass>;
+    using SharedPtr = std::shared_ptr<SimpleToneMappingPass>;
+    using SharedConstPtr = std::shared_ptr<const SimpleToneMappingPass>;
 
-    static SharedPtr create(const std::string &bufferToAccumulate) { return SharedPtr(new SimpleAccumulationPass(bufferToAccumulate)); }
-    virtual ~SimpleAccumulationPass() = default;
+    static SharedPtr create(const std::string &inBuf, const std::string &outBuf) { return SharedPtr(new SimpleToneMappingPass(inBuf, outBuf)); }
+    virtual ~SimpleToneMappingPass() = default;
 
 protected:
-	SimpleAccumulationPass(const std::string &bufferToAccumulate);
+	SimpleToneMappingPass(const std::string &inBuf, const std::string &outBuf);
 
     // Implementation of SimpleRenderPass interface
 	bool initialize(RenderContext* pRenderContext, ResourceManager::SharedPtr pResManager) override;
-	void initScene(RenderContext* pRenderContext, Scene::SharedPtr pScene) override;
     void execute(RenderContext* pRenderContext) override;
     void renderGui(Gui* pGui) override;
-    void resize(uint32_t width, uint32_t height) override;
-	void stateRefreshed() override;
 
 	// Override some functions that provide information to the RenderPipeline class
 	bool appliesPostprocess() override { return true; }
-	bool hasAnimation() override { return false; }
 
-	// A helper utility to determine if the current scene (if any) has had any camera motion
-	bool hasCameraMoved();
-
-    // Information about the rendering texture we're accumulating into
-	std::string                   mAccumChannel;
-
-	// State for our accumulation shader
-	FullscreenLaunch::SharedPtr   mpAccumShader;
-	GraphicsState::SharedPtr      mpGfxState;
-	Texture::SharedPtr            mpLastFrame;
-	Fbo::SharedPtr                mpInternalFbo;
-
-	// We stash a copy of our current scene.  Why?  To detect if changes have occurred.
-	Scene::SharedPtr              mpScene;
-	mat4                          mpLastCameraMatrix;
-
-	// Is our accumulation enabled?
-	bool                          mDoAccumulation = true;
-
-	// How many frames have we accumulated so far?
-	uint32_t                      mAccumCount = 0;
+      
+	GraphicsState::SharedPtr    mpGfxState;
+	std::string                 mInChannel;         ///< What resource are we expecting as our input?
+	std::string                 mOutChannel;        ///< What resource should we dump our output into?
+	ToneMapping::SharedPtr      mpToneMapper;       ///< Falcor's utility class for tone-mapping.
 };

@@ -19,15 +19,8 @@
 #include "SimpleAccumulationPass.h"
 
 namespace {
-	// Where is our shader located?
     const char *kAccumShader = "Tutorial02\\accumulate.ps.hlsl";
 };
-
-// Define our constructor methods
-SimpleAccumulationPass::SharedPtr SimpleAccumulationPass::create(const std::string &bufferToAccumulate) 
-{ 
-	return SharedPtr(new SimpleAccumulationPass(bufferToAccumulate));
-}
 
 SimpleAccumulationPass::SimpleAccumulationPass(const std::string &bufferToAccumulate)
 	: ::RenderPass("Accumulation Pass", "Accumulation Options")
@@ -37,25 +30,28 @@ SimpleAccumulationPass::SimpleAccumulationPass(const std::string &bufferToAccumu
 
 bool SimpleAccumulationPass::initialize(RenderContext* pRenderContext, ResourceManager::SharedPtr pResManager)
 {
+	if (!pResManager) return false;
+
 	// Stash our resource manager; ask for the texture the developer asked us to accumulate
 	mpResManager = pResManager;
 	mpResManager->requestTextureResource(mAccumChannel);
 
-	// Set the default scene to load
-	mpResManager->setDefaultSceneName("Data/pink_room/pink_room.fscene");
-
-	// Create our graphics state and an accumulation shader
+	// Create our graphics state and accumulation shader
 	mpGfxState = GraphicsState::create();
 	mpAccumShader = FullscreenLaunch::create(kAccumShader);
+
+	// Our GUI needs less space than other passes, so shrink the GUI window.
+	setGuiSize(ivec2(250, 135));
+
 	return true;
 }
 
 void SimpleAccumulationPass::initScene(RenderContext* pRenderContext, Scene::SharedPtr pScene)
 {
-	// Reset accumulation on loading a new scene
+	// Reset accumulation.
 	mAccumCount = 0;
 
-	// When our renderer moves around we want to reset accumulation, so stash the scene pointer
+	// When our renderer moves around, we want to reset accumulation
 	mpScene = pScene;
 
 	// Grab a copy of the current scene's camera matrix (if it exists)
@@ -65,17 +61,15 @@ void SimpleAccumulationPass::initScene(RenderContext* pRenderContext, Scene::Sha
 
 void SimpleAccumulationPass::resize(uint32_t width, uint32_t height)
 {
-    // Create / resize a texture to store the previous frame.
-	//    Parameters: width, height, texture format, texture array size, #mip levels, initialization data, how we expect to use it.
-    mpLastFrame = Texture::create2D(width, height, ResourceFormat::RGBA32Float, 1, 1, nullptr, ResourceManager::kDefaultFlags);
-    // We need a framebuffer to attach to our graphics pipe state (when running our full-screen pass).  We can ask our
-	//    resource manager to create one for us, with specified width, height, and format and one color buffer.
+    // Resize internal resources
+    mpLastFrame = Texture::create2D(width, height, ResourceFormat::RGBA32Float, 1, 1, nullptr, Resource::BindFlags::ShaderResource | Resource::BindFlags::UnorderedAccess | Resource::BindFlags::RenderTarget);
+
+    // We need a framebuffer to attach to our graphics pipe state (when running our full-screen pass)
 	mpInternalFbo = ResourceManager::createFbo(width, height, ResourceFormat::RGBA32Float);
     mpGfxState->setFbo(mpInternalFbo);
 
     // Whenever we resize, we'd better force accumulation to restart
 	mAccumCount = 0;
-
 }
 
 void SimpleAccumulationPass::renderGui(Gui* pGui)
@@ -120,19 +114,19 @@ void SimpleAccumulationPass::execute(RenderContext* pRenderContext)
 		mpLastCameraMatrix = mpScene->getActiveCamera()->getViewMatrix();
 	}
 
-    // Set shader parameters for our accumulation pass
+    // Set shader parameters for our accumulation
 	auto shaderVars = mpAccumShader->getVars();
 	shaderVars["PerFrameCB"]["gAccumCount"] = mAccumCount++;
 	shaderVars["gLastFrame"] = mpLastFrame;
 	shaderVars["gCurFrame"]  = inputTexture;
 
-    // Execute the accumulation shader
+    // Do the accumulation
     mpAccumShader->execute(pRenderContext, mpGfxState);
 
     // We've accumulated our result.  Copy that back to the input/output buffer
     pRenderContext->blit(mpInternalFbo->getColorTexture(0)->getSRV(), inputTexture->getRTV());
 
-    // Also keep a copy of the current accumulation for use next frame 
+    // Keep a copy for next frame (we need this to avoid reading & writing to the same resource)
     pRenderContext->blit(mpInternalFbo->getColorTexture(0)->getSRV(), mpLastFrame->getRTV());
 }
 
